@@ -1,9 +1,8 @@
 require('dotenv').config()
 const sequelize = require("sequelize");
-//const params = require("../params.json");
 
-const seq = new sequelize.Sequelize(process.env.LOCAL_DB_NAME, process.env.LOCAL_DB_USERNAME, process.env.LOCAL_DB_PASSWORD, {
-    host: process.env.LOCAL_DB_HOST,
+const seq = new sequelize.Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+    host: process.env.DB_HOST,
     dialect: 'mysql',
 });
 

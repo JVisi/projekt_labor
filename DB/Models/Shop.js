@@ -1,6 +1,8 @@
 
 const sequelize = require("sequelize");
 const config = require("../config");
+const Coupon = require("./Coupon");
+const Product = require("./Product");
 
 
 const Shop = config.sequelize.define('shop', {
@@ -22,4 +24,13 @@ const Shop = config.sequelize.define('shop', {
 }, {
     timestamps: false
 });
+
+
+Shop.hasMany(Product)
+Product.belongsTo(Shop)
+
+
+Shop.hasMany(Coupon)
+Coupon.belongsTo(Shop)
+
 module.exports=Shop
