@@ -1,13 +1,13 @@
 
 const sequelize = require("sequelize");
 const config = require("../config");
-const Shop = require("./Shop")
 
 const Product = config.sequelize.define('product', {
     id: {
         type: sequelize.DataTypes.INTEGER,
         primaryKey: true,
         unique: true,
+        autoIncrement:true
     },
     name: {
         type: sequelize.DataTypes.STRING,

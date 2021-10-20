@@ -1,7 +1,6 @@
 
 const sequelize = require("sequelize");
 const config = require("../config");
-const Shop = require("./Shop");
 
 
 const Coupon = config.sequelize.define('coupon', {
@@ -9,6 +8,7 @@ const Coupon = config.sequelize.define('coupon', {
         type: sequelize.DataTypes.INTEGER,
         primaryKey: true,
         unique: true,
+        autoIncrement:true
     },
     name: {
         type: sequelize.DataTypes.STRING,
@@ -17,6 +17,11 @@ const Coupon = config.sequelize.define('coupon', {
     },
     description: {
         type: sequelize.DataTypes.STRING,
+        allowNull: false,
+        unique: false
+    },
+    endDate: {
+        type: sequelize.DataTypes.DATE,
         allowNull: false,
         unique: false
     },

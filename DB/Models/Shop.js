@@ -10,11 +10,12 @@ const Shop = config.sequelize.define('shop', {
         type: sequelize.DataTypes.INTEGER,
         primaryKey: true,
         unique: true,
+        autoIncrement:true
     },
     name: {
         type: sequelize.DataTypes.STRING,
         allowNull: false,
-        unique: true
+        unique: false
     },
     address: {
         type: sequelize.DataTypes.STRING,
