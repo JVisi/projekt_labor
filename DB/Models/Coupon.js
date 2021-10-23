@@ -20,6 +20,11 @@ const Coupon = config.sequelize.define('coupon', {
         allowNull: false,
         unique: false
     },
+    bargain:{
+        type:sequelize.DataTypes.INTEGER,
+        allowNull:false,
+        unique:false
+    },
     endDate: {
         type: sequelize.DataTypes.DATE,
         allowNull: false,

@@ -8,14 +8,7 @@ const Shop=require('./DB/Models/Shop');
 const Product=require('./DB/Models/Product');
 const Coupon=require('./DB/Models/Coupon');
 
-//Coupon.sync({force:true})
-//config.testConnection()
-//config.sequelize.sync({alter:true})
-
-//Product.create({"name":"Kenyér","price":350,"shopId":1})
-/* Product.findOne({where:[{"id":1}], include:[Shop]}).then((result)=>{
-    console.log(result.dataValues)
-}) */
+//Coupon.sync({alter:true})
 const _port = process.env.port || 3000
 app.use(bodyParser.json())
 app.use(router)

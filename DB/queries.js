@@ -32,8 +32,14 @@ class QueryProvider {
         })
     }
     static getCoupons(){
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
         return new Promise((resolve,reject)=>{
-            Coupon.findAll({limit:100}).then((result)=>{
+            Coupon.findAll({limit:100,where:{"endDate":{[Op.gte]:today}}}).then((result)=>{
                 let coupon=result.map((c)=>{
                     return c.dataValues
                 })
@@ -62,7 +68,7 @@ class QueryProvider {
     static customCoupons(shopId){
         return new Promise((resolve,reject)=>{
             console.log(shopId)
-            Coupon.findAll({limit:100, where:[{"shopId":shopId}]}).then((result)=>{
+            Coupon.findAll({limit:100, where:[{"shopId":shopId, "endDate":{[Op.gte]:today}}]}).then((result)=>{
                 let coupons=result.map((shop)=>{
                     return shop.dataValues
                 })
@@ -84,6 +90,26 @@ class QueryProvider {
                 if(result==null){
                     Shop.create({"name":shopName,"address":shopAddress}).then(shop=>{
                         resolve({shop:shop.dataValues})
+                    })
+                }
+                else{
+                    reject({"error":"Shop on this address already exists"})
+                }
+            })
+        })
+    }
+    static addCoupon(name, description, endDate, bargain, shopId){
+        return new Promise((resolve,reject)=>{
+            Shop.findOne({where:{"id":shopId}
+            }).then(result=>{
+                if(result!=null){
+                    Coupon.create({
+                        "name":name || result.dataValues.name+" coupon",
+                        "description":description,
+                        "endDate":endDate || reject({"error":"Wrong endDate for coupon"}),
+                        "bargain":bargain || reject({"error":"Wrong bargain for coupon"}),
+                        "shopId":shopId}).then(coupon=>{
+                        resolve({"coupon":coupon.dataValues})
                     })
                 }
                 else{
