@@ -9,7 +9,7 @@ const Product=require('./DB/Models/Product');
 const Coupon=require('./DB/Models/Coupon');
 
 //Coupon.sync({alter:true})
-const _port = process.env.port || 3000
+const _port = process.env.PORT || 3000
 app.use(bodyParser.json())
 app.use(router)
 app.listen(_port,()=>{
