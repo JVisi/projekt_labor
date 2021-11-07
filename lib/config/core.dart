@@ -1,25 +1,31 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop_assistant/core/shopping_list.dart';
 
-
-final routes={
+final routes = {
   // '/loginPage':(context)=>const LoginScreen(),
   // '/registerPage':(context)=>const RegisterScreen(),
 };
 
-/*
-Future<void> saveToPreferences(String? email,String? password) async{
-  SharedPreferences loginCredentials= await SharedPreferences.getInstance();
-  if(email!=null && password!=null){
-    loginCredentials.setString("email", email);
-    loginCredentials.setString("password", password);
+Future<void> saveToPreferences(ShoppingList shoppingList) async {
+  SharedPreferences savedShoppingList = await SharedPreferences.getInstance();
+  savedShoppingList.setString("shoppingList", jsonEncode(shoppingList));
+}
+
+Future<ShoppingList> loadShoppingList() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.getString("shoppingList") != null) {
+    ShoppingList sl =
+        ShoppingList.fromJson(jsonDecode(prefs.getString("shoppingList")!));
+    return sl;
   }
+  return ShoppingList();
 }
-Future<Map<String?, String?>> loadLoginCreds() async {
-  SharedPreferences prefs=await SharedPreferences.getInstance();
-  return {"email":prefs.getString("email"),"password":prefs.getString("password")};
-}
+
+/*
 Future<void> killLoginCreds() async{
   SharedPreferences prefs=await SharedPreferences.getInstance();
   prefs.remove("email");
@@ -27,22 +33,20 @@ Future<void> killLoginCreds() async{
 }
 */
 
-
 class SizeConfig {
   static MediaQueryData? _mediaQueryData;
-  static double screenWidth=0;
-  static double screenHeight=0;
-  static double blockSizeHorizontal=0;
-  static double blockSizeVertical=0;
+  static double screenWidth = 0;
+  static double screenHeight = 0;
+  static double blockSizeHorizontal = 0;
+  static double blockSizeVertical = 0;
   static double? _safeAreaHorizontal;
   static double? _safeAreaVertical;
   static double? safeBlockHorizontal;
   static double? safeBlockVertical;
 
-
   void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);
-    if(_mediaQueryData!=null) {
+    if (_mediaQueryData != null) {
       screenWidth = _mediaQueryData!.size.width;
       screenHeight = _mediaQueryData!.size.height;
       blockSizeHorizontal = screenWidth / 100;
@@ -56,7 +60,8 @@ class SizeConfig {
     }
   }
 }
-class CustomColors{
+
+class CustomColors {
   static Color backgroundColor = Colors.blue;
   static Color interact = Colors.orangeAccent;
   static Color textColor = Colors.orangeAccent;
@@ -66,11 +71,12 @@ class CustomColors{
 class WebConfig {
   static String url = "https://bookrate-api.herokuapp.com";
   static Map<String, String> headers = {
-    HttpHeaders.contentTypeHeader:"application/json"
+    HttpHeaders.contentTypeHeader: "application/json"
   };
-  static String Cookie=""; //"authorization": WebConfig.authKey,
+  static String Cookie = ""; //"authorization": WebConfig.authKey,
 }
-class ListViewWithoutGlowEffect extends ScrollBehavior{
+
+class ListViewWithoutGlowEffect extends ScrollBehavior {
   @override
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
@@ -81,5 +87,10 @@ class ListViewWithoutGlowEffect extends ScrollBehavior{
 ThemeData themeConfig() => ThemeData(
     iconTheme: IconThemeData(size: SizeConfig.blockSizeVertical * 7),
     textTheme: TextTheme(
-        bodyText2: TextStyle(fontSize: SizeConfig.blockSizeVertical * 5, fontWeight: FontWeight.bold, color:CustomColors.textColor),
-        bodyText1: TextStyle(fontSize: SizeConfig.blockSizeVertical * 2.5, color:CustomColors.textColor)));
+        bodyText2: TextStyle(
+            fontSize: SizeConfig.blockSizeVertical * 5,
+            fontWeight: FontWeight.bold,
+            color: CustomColors.textColor),
+        bodyText1: TextStyle(
+            fontSize: SizeConfig.blockSizeVertical * 2.5,
+            color: CustomColors.textColor)));
