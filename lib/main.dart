@@ -60,7 +60,7 @@ class Start extends StatelessWidget {
     // TODO: implement build
     return LoadingHandler(future: loadShoppingList,
         succeeding: (ShoppingList slist) {
-            return const MainScreen();
+            return MainScreen(shoppingList: slist,);
         });
   }
 
