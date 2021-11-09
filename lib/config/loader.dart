@@ -91,7 +91,7 @@ class LoadingHandlerState<T> extends State<LoadingHandler<T>> {
             ),
           ),
           Text(
-            name ?? AppLocalizations.of(context)!.error,
+            name ?? AppLocalizations.of(context).error,
             style: themeConfig().textTheme.bodyText1,
           ),
           needReload != null
@@ -99,7 +99,7 @@ class LoadingHandlerState<T> extends State<LoadingHandler<T>> {
                   padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical),
                   child: ElevatedButton(
                       onPressed: refresh,
-                      child: Text(AppLocalizations.of(context)!.reloadBtn,
+                      child: Text(AppLocalizations.of(context).reloadBtn,
                           style: themeConfig().textTheme.bodyText1)),
                 )
               : Text(""),
@@ -123,7 +123,7 @@ class LoadingHandlerState<T> extends State<LoadingHandler<T>> {
           size: SizeConfig.blockSizeVertical * 10,
         ),
         Icon(icon ?? Icons.hourglass_empty),
-        Text(name ?? AppLocalizations.of(context)!.loading,
+        Text(name ?? AppLocalizations.of(context).loading,
             style: themeConfig().textTheme.bodyText1),
         Text(desc ?? "", style: themeConfig().textTheme.bodyText1),
         Spacer(

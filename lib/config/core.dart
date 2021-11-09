@@ -22,7 +22,7 @@ Future<ShoppingList> loadShoppingList() async {
         ShoppingList.fromJson(jsonDecode(prefs.getString("shoppingList")!));
     return sl;
   }
-  return ShoppingList();
+  return ShoppingList(shopItems: List.empty(growable: true), coupons: List.empty(growable: true));
 }
 
 /*
@@ -64,14 +64,15 @@ class SizeConfig {
 class CustomColors {
   static Color backgroundColor = Colors.blue;
   static Color interact = Colors.orangeAccent;
-  static Color textColor = Colors.orangeAccent;
+  static Color textColor = Colors.black45;
   static Color starColor = Colors.yellow;
 }
 
 class WebConfig {
-  static String url = "https://bookrate-api.herokuapp.com";
+  static String url = "https://shop-assistant.herokuapp.com/mobile";
   static Map<String, String> headers = {
-    HttpHeaders.contentTypeHeader: "application/json"
+    HttpHeaders.contentTypeHeader: "application/json",
+    HttpHeaders.authorizationHeader: "szup3rbizt0ns4g0s"
   };
   static String Cookie = ""; //"authorization": WebConfig.authKey,
 }
@@ -88,7 +89,7 @@ ThemeData themeConfig() => ThemeData(
     iconTheme: IconThemeData(size: SizeConfig.blockSizeVertical * 7),
     textTheme: TextTheme(
         bodyText2: TextStyle(
-            fontSize: SizeConfig.blockSizeVertical * 5,
+            fontSize: SizeConfig.blockSizeVertical * 3,
             fontWeight: FontWeight.bold,
             color: CustomColors.textColor),
         bodyText1: TextStyle(

@@ -10,7 +10,24 @@ class AppModel extends Model{
   /*late User _user;
   void setUser(User currentUser)=>_user=currentUser;
   User getUser()=>_user;*/
+  void addToShoppingList(BuildContext context, ShopItem item){
+    item.amount==null?item.amount=1:null;
+    final int index=shoppingList.shopItems!.indexWhere((element) => element.id==item.id);
+    if(index!=-1) {
+      int currentAmount=shoppingList.shopItems!.elementAt(index).amount!;
+      shoppingList.shopItems!.removeWhere((element) => element.id==item.id);
+      int newAmount=currentAmount + item.amount!;
 
+      ShopItem newItem=ShopItem(id: item.id, name: item.name, price: item.price, shopId: item.shopId, shop: item.shop,amount: newAmount);
+      shoppingList.shopItems!.add(newItem);
+    }
+    else{
+      shoppingList.shopItems!.add(item);
+    }
+  }
+  void removeFromShoppingList(BuildContext context, ShopItem item){
+    shoppingList.shopItems!.removeWhere((element) => element.id==item.id);
+  }
 
   static AppModel of(BuildContext context) => ScopedModel.of<AppModel>(context);
 }

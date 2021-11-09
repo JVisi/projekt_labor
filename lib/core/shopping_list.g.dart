@@ -22,13 +22,35 @@ Map<String, dynamic> _$ShoppingListToJson(ShoppingList instance) =>
     };
 
 ShopItem _$ShopItemFromJson(Map<String, dynamic> json) => ShopItem(
+      id: json['id'] as int,
       name: json['name'] as String,
-      price: json['price'] as String,
+      price: json['price'] as int,
+      barcode: json['barcode'] as String?,
+      shopId: json['shopId'] as int,
+      shop: Shop.fromJson(json['shop'] as Map<String, dynamic>),
+      amount: json['amount'] as int?,
     );
 
 Map<String, dynamic> _$ShopItemToJson(ShopItem instance) => <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'price': instance.price,
+      'barcode': instance.barcode,
+      'shopId': instance.shopId,
+      'shop': instance.shop,
+      'amount': instance.amount,
+    };
+
+Shop _$ShopFromJson(Map<String, dynamic> json) => Shop(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      address: json['address'] as String,
+    );
+
+Map<String, dynamic> _$ShopToJson(Shop instance) => <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'address': instance.address,
     };
 
 Coupon _$CouponFromJson(Map<String, dynamic> json) => Coupon(

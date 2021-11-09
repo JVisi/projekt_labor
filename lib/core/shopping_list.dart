@@ -13,7 +13,7 @@ class ShoppingList {
     if(shopItems!=null){
       double sum=0;
       shopItems!.forEach((element) {
-          sum+=double.parse(element.price);
+          sum+=element.price*element.amount!;
       });
       return sum;
     }
@@ -28,15 +28,34 @@ class ShoppingList {
 
 @JsonSerializable()
 class ShopItem {
+  int id;
   String name;
-  String price;
+  int price;
+  String? barcode;
+  int shopId;
+  Shop shop;
+  int? amount;
 
-  ShopItem({required this.name, required this.price});
+  ShopItem({required this.id, required this.name, required this.price, this.barcode,required this.shopId, required this.shop, this.amount});
 
   factory ShopItem.fromJson(Map<String, dynamic> json) =>
       _$ShopItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$ShopItemToJson(this);
+}
+@JsonSerializable()
+class Shop{
+    int id;
+    String name;
+    String address;
+
+    Shop({required this.id, required this.name, required this.address});
+
+
+    factory Shop.fromJson(Map<String, dynamic> json) =>
+        _$ShopFromJson(json);
+
+    Map<String, dynamic> toJson() => _$ShopToJson(this);
 }
 
 @JsonSerializable()
