@@ -17,14 +17,14 @@ class ItemScreenState extends State<ItemScreen> {
 
   late Iterable<StatefulBuilder>itemTiles;
   final search=TextEditingController();
-  late bool tileMarked;
+  late List<int> ids;
 @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    itemTiles=widget.items.map((e) => _ListTileBuilder(e));
+    ids=List.empty(growable: true);
+    itemTiles=widget.items.map((e) => _ListTileBuilder(e,ids));
     search.addListener(() { });
-    tileMarked=false;
   }
 
   @override
@@ -43,13 +43,18 @@ class ItemScreenState extends State<ItemScreen> {
     );
   }
 
-  StatefulBuilder _ListTileBuilder(ShopItem item) {
+  StatefulBuilder _ListTileBuilder(ShopItem item, List<int>ids) {
     return StatefulBuilder(
       builder:(context, _setState)=> CheckboxListTile(
-        value: tileMarked,
+        value: ids.contains(item.id),
         onChanged: (toAdd) {
           _setState(() {
-            tileMarked=!tileMarked;
+            if(toAdd!){
+                ids.add(item.id);
+            }
+            else{
+              ids.remove(item.id);
+            }
           });
           toAdd!?AppModel.of(context).addToShoppingList(context,item):AppModel.of(context).removeFromShoppingList(context,item);
 
@@ -70,7 +75,7 @@ class ItemScreenState extends State<ItemScreen> {
                 maxValue: 1000,
                 minValue: 1,
                 step: 1,
-                enable: true,
+                enable: !ids.contains(item.id),
                 onValue: (value) {
                   item.amount=int.parse(value.toString());
                 },
