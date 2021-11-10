@@ -18,19 +18,26 @@ class MainScreen extends StatefulWidget {
 
 class MainScreenState extends State<MainScreen> {
   late ShoppingList shoppingList;
-  late List<ListTile> listTiles;
+  late List<StatefulBuilder> listTiles;
+  late List<int> ids;
 
   @override
   initState() {
     super.initState();
     shoppingList = AppModel.of(context).getShoppingList();
     listTiles = _listViewBuilder(shoppingList);
+    ids=List.empty(growable: true);
   }
 
   @override
   Widget build(BuildContext context) {
     _refresh();
-    
+    List<ShopItem> checkedItems=[];
+    shoppingList.shopItems!.forEach((element) {
+      if(ids.contains(element.id)){
+        checkedItems.add(element);
+      }
+    });
     return Scaffold(
       body: Column(
         children: [
@@ -51,7 +58,7 @@ class MainScreenState extends State<MainScreen> {
               children: [
                 Text(
                   AppLocalizations.of(context).final_amount +
-                      bargainCounter(shoppingList).toString(),
+                      bargainCounter(checkedItems,shoppingList.coupons).toString(),
                   style: themeConfig().textTheme.bodyText2,
                 ),
                 FloatingActionButton(
@@ -82,8 +89,8 @@ class MainScreenState extends State<MainScreen> {
         }));
   }
 
-  List<ListTile> _listViewBuilder(ShoppingList sl) {
-    List<ListTile> allTiles = List.empty(growable: true);
+  List<StatefulBuilder> _listViewBuilder(ShoppingList sl) {
+    List<StatefulBuilder> allTiles = List.empty(growable: true);
     if (sl.shopItems != null) {
       final shopItems = sl.shopItems!.map((e) => _shopItemListTileBuilder(e));
       shopItems.forEach((element) {
@@ -100,35 +107,50 @@ class MainScreenState extends State<MainScreen> {
     return allTiles;
   }
 
-  ListTile _shopItemListTileBuilder(ShopItem item) {
-    return ListTile(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Text(item.name),
-              ],
-            ),
-            Column(
-              children: [
-                Text(AppLocalizations.of(context).amount+item.amount!.toString()),
-              ],
-            ),
-            Column(
-              children: [
-                GestureDetector(
-                  child: Icon(Icons.delete),
-                  onTap: () {
-                    AppModel.of(context).removeFromShoppingList(context, item);
-                    _refresh();
-                  },
-                )
-              ],
-            )
-          ],
-        ),
-        subtitle: Text(item.price.toString()));
+  StatefulBuilder _shopItemListTileBuilder(ShopItem item) {
+    return StatefulBuilder(
+      builder: (context,_setState)=> CheckboxListTile(
+          value: ids.contains(item.id),
+          onChanged: (toAdd){
+            _setState(() {
+              if(toAdd!){
+                ids.add(item.id);
+                _refresh();
+              }
+              else{
+                ids.remove(item.id);
+                _refresh();
+              }
+            });
+          },
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Text(item.name),
+                ],
+              ),
+              Column(
+                children: [
+                  Text(AppLocalizations.of(context).amount+item.amount!.toString()),
+                ],
+              ),
+              Column(
+                children: [
+                  GestureDetector(
+                    child: Icon(Icons.delete),
+                    onTap: () {
+                      AppModel.of(context).removeFromShoppingList(context, item);
+                      _refresh();
+                    },
+                  )
+                ],
+              )
+            ],
+          ),
+          subtitle: Text(item.price.toString())),
+    );
   }
 
   void _refresh() {
@@ -138,18 +160,21 @@ class MainScreenState extends State<MainScreen> {
     });
   }
 
-  ListTile _couponListTileBuilder(Coupon coupon) {
-    return ListTile(
-      title: Text(
-        coupon.name + ",  " + coupon.bargain.toString() + "%",
+  StatefulBuilder _couponListTileBuilder(Coupon coupon) {
+    return StatefulBuilder(
+      builder: (context, _setState)=>ListTile(
+        title: Text(
+          coupon.name + ",  " + coupon.bargain.toString() + "%",
+        ),
       ),
     );
   }
 
-  double bargainCounter(ShoppingList shoppingList) {
-    double fullAmount = shoppingList.sumOfItems();
-    if (shoppingList.coupons != null) {
-      shoppingList.coupons!.forEach((element) {
+  double bargainCounter(List<ShopItem> shoppingList, List<Coupon>? coupons) {
+    ShoppingList sl=ShoppingList(shopItems: shoppingList, coupons: coupons);
+    double fullAmount = sl.sumOfItems();
+    if (sl.coupons != null) {
+      sl.coupons!.forEach((element) {
         fullAmount = element.calculateBargain(fullAmount);
       });
     }
