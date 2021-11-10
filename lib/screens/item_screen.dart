@@ -46,13 +46,15 @@ class ItemScreenState extends State<ItemScreen> {
   }
 
   List<Shop> distinctShops() {
-    List<Shop> shops = List.empty(growable: true);
+    List<int> dShopIds=List.empty(growable: true);
+    List<Shop> distinctShop = List.empty(growable: true);
     widget.originalItems.forEach((element) {
-      if (!shops.contains(element.shop)) {
-        shops.add(element.shop);
+      if (!dShopIds.contains(element.shop.id)) {
+        dShopIds.add(element.shop.id);
+        distinctShop.add(element.shop);
       }
     });
-    return shops;
+    return distinctShop;
   }
 
   @override
