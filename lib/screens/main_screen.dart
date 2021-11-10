@@ -82,7 +82,7 @@ class MainScreenState extends State<MainScreen> {
             builder: (context) => LoadingHandler(
                 future: GetShopItems().sendRequest,
                 succeeding: (List<ShopItem> sList) {
-                  return ItemScreen(items: sList);
+                  return ItemScreen(originalItems: sList);
                 }))).then((value) => setState(() {
           shoppingList = AppModel.of(context).getShoppingList();
           listTiles = _listViewBuilder(shoppingList);
