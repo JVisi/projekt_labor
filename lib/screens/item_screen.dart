@@ -110,14 +110,14 @@ class ItemScreenState extends State<ItemScreen> {
       List<ShopItem> textFiltered = List.empty(growable: true);
       if (filteredItems.isNotEmpty) {
         filteredItems.forEach((element) {
-          if (element.name.contains(textFilter)) {
+          if (element.name.toLowerCase().contains(textFilter)) {
             textFiltered.add(element);
           }
         });
         itemTiles = textFiltered.map((e) => _ListTileBuilder(e, ids));
       } else {
         widget.originalItems.forEach((element) {
-          if (element.name.contains(textFilter)) {
+          if (element.name.toLowerCase().contains(textFilter)) {
             textFiltered.add(element);
           }
         });
