@@ -21,6 +21,7 @@ class ItemScreenState extends State<ItemScreen> {
   late List<int> ids;
   late List<int> shops;
   List<ShopItem> filteredItems = [];
+  String textFilter = "";
 
   @override
   void initState() {
@@ -28,25 +29,23 @@ class ItemScreenState extends State<ItemScreen> {
     super.initState();
     ids = List.empty(growable: true);
     shops = List.empty(growable: true);
+
     if (filteredItems.isEmpty) {
       itemTiles = widget.originalItems.map((e) => _ListTileBuilder(e, ids));
     } else {
       itemTiles = filteredItems!.map((e) => _ListTileBuilder(e, ids));
     }
     shopFilterTiles = distinctShops().map((e) => _ShopFilterBuilder(e, shops));
-    search.addListener(() {});
-  }
-
-  void _refresh() {
-    if (filteredItems.isEmpty) {
-      itemTiles = widget.originalItems.map((e) => _ListTileBuilder(e, ids));
-    } else {
-      itemTiles = filteredItems!.map((e) => _ListTileBuilder(e, ids));
-    }
+    search.addListener(() {
+      setState(() {
+        textFilter = search.text;
+        _refresh();
+      });
+    });
   }
 
   List<Shop> distinctShops() {
-    List<int> dShopIds=List.empty(growable: true);
+    List<int> dShopIds = List.empty(growable: true);
     List<Shop> distinctShop = List.empty(growable: true);
     widget.originalItems.forEach((element) {
       if (!dShopIds.contains(element.shop.id)) {
@@ -106,49 +105,84 @@ class ItemScreenState extends State<ItemScreen> {
     );
   }
 
+  void _refresh() {
+    if (textFilter != "") {
+      List<ShopItem> textFiltered = List.empty(growable: true);
+      if (filteredItems.isNotEmpty) {
+        filteredItems.forEach((element) {
+          if (element.name.contains(textFilter)) {
+            textFiltered.add(element);
+          }
+        });
+        itemTiles = textFiltered.map((e) => _ListTileBuilder(e, ids));
+      } else {
+        widget.originalItems.forEach((element) {
+          if (element.name.contains(textFilter)) {
+            textFiltered.add(element);
+          }
+        });
+        itemTiles = textFiltered.map((e) => _ListTileBuilder(e, ids));
+      }
+    } else {
+      if (filteredItems.isEmpty) {
+        itemTiles = widget.originalItems.map((e) => _ListTileBuilder(e, ids));
+      } else {
+        itemTiles = filteredItems!.map((e) => _ListTileBuilder(e, ids));
+      }
+    }
+  }
+
   StatefulBuilder _ListTileBuilder(ShopItem item, List<int> ids) {
     return StatefulBuilder(
-      builder: (context, _setState) => CheckboxListTile(
-        value: ids.contains(item.id),
-        onChanged: (toAdd) {
-          _setState(() {
-            if (toAdd!) {
-              ids.add(item.id);
-            } else {
-              ids.remove(item.id);
-            }
-          });
-          toAdd!
-              ? AppModel.of(context).addToShoppingList(context, item)
-              : AppModel.of(context).removeFromShoppingList(context, item);
+      builder: (context, _setState) => GestureDetector(
+        onLongPress: () {
+          print("asdf");
+
+          ///TODO
+          ///go to shopItem edit here
         },
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Text(
-                  item.name + ",  " + item.price.toString() + "Ft",
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                CustomNumberPicker(
-                  initialValue: 1,
-                  maxValue: 1000,
-                  minValue: 1,
-                  step: 1,
-                  enable: !ids.contains(item.id),
-                  onValue: (value) {
-                    item.amount = int.parse(value.toString());
-                  },
-                ),
-              ],
-            )
-          ],
+        child: CheckboxListTile(
+          value: ids.contains(item.id),
+          onChanged: (toAdd) {
+            _setState(() {
+              if (toAdd!) {
+                ids.add(item.id);
+              } else {
+                ids.remove(item.id);
+              }
+            });
+            toAdd!
+                ? AppModel.of(context).addToShoppingList(context, item)
+                : AppModel.of(context).removeFromShoppingList(context, item);
+          },
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Text(
+                    item.name + ",  " + item.price.toString() + "Ft",
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  CustomNumberPicker(
+                    initialValue: 1,
+                    maxValue: 1000,
+                    minValue: 1,
+                    step: 1,
+                    enable: !ids.contains(item.id),
+                    onValue: (value) {
+                      item.amount = int.parse(value.toString());
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
+          subtitle: Text(item.shop.name + "  " + item.shop.address ?? ""),
         ),
-        subtitle: Text(item.shop.name + "  " + item.shop.address ?? ""),
       ),
     );
   }
@@ -166,8 +200,10 @@ class ItemScreenState extends State<ItemScreen> {
             }
           });
           toFilter!
-              ? addToFilteredItems(shop)//AppModel.of(context).addToShoppingList(context, item)
-              : removeFromFilteredItems(shop); //AppModel.of(context).removeFromShoppingList(context, item);
+              ? addToFilteredItems(
+                  shop) //AppModel.of(context).addToShoppingList(context, item)
+              : removeFromFilteredItems(
+                  shop); //AppModel.of(context).removeFromShoppingList(context, item);
         },
         title: Text(shop.name + " "),
         subtitle: Text(shop.address ?? ""),
