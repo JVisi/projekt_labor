@@ -59,7 +59,7 @@ class MainScreenState extends State<MainScreen> {
                 Text(
                   AppLocalizations.of(context).final_amount +
                       bargainCounter(checkedItems, shoppingList.coupons)
-                          .toString(),
+                          .toStringAsFixed(0),
                   style: themeConfig().textTheme.bodyText2,
                 ),
                 FloatingActionButton(
@@ -186,22 +186,77 @@ class MainScreenState extends State<MainScreen> {
     );
   }
 
+  StatefulBuilder _couponListTileBuilder(Coupon coupon) {
+    return StatefulBuilder(
+      builder: (context, _setState) => CheckboxListTile(
+        value: ids.contains(coupon.id),
+        onChanged: (toAdd) {
+          _setState(() {
+            if (toAdd!) {
+              ids.add(coupon.id);
+              _refresh();
+            } else {
+              ids.remove(coupon.id);
+              _refresh();
+            }
+          });
+        },
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    coupon.name + ",  " + coupon.shop.name,
+                    style: TextStyle(
+                        color: ids.contains(coupon.id)
+                            ? Colors.black45
+                            : Colors.black,
+                        backgroundColor: ids.contains(coupon.id)
+                            ? Colors.lightGreenAccent
+                            : Colors.white),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                children: [
+                  Text(AppLocalizations.of(context).amount +
+                      coupon.amount!.toString()),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  GestureDetector(
+                    child: Icon(Icons.delete),
+                    onTap: () {
+                      AppModel.of(context).removeFromCoupons(context, coupon);
+                      _refresh();
+                    },
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+        subtitle: Text(coupon.desc),
+      ),
+    );
+  }
+
   void _refresh() {
     setState(() {
       shoppingList = AppModel.of(context).getShoppingList();
       listTiles = _listViewBuilder(shoppingList);
     });
     saveToPreferences(shoppingList);
-  }
-
-  StatefulBuilder _couponListTileBuilder(Coupon coupon) {
-    return StatefulBuilder(
-      builder: (context, _setState) => ListTile(
-        title: Text(
-          coupon.name + ",  " + coupon.bargain.toString() + "%",
-        ),
-      ),
-    );
   }
 
   double bargainCounter(List<ShopItem> shoppingList, List<Coupon>? coupons) {

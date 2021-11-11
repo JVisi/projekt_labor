@@ -54,13 +54,25 @@ Map<String, dynamic> _$ShopToJson(Shop instance) => <String, dynamic>{
     };
 
 Coupon _$CouponFromJson(Map<String, dynamic> json) => Coupon(
+      id: json['id'] as int,
       name: json['name'] as String,
-      desc: json['desc'] as String,
-      bargain: (json['bargain'] as num).toDouble(),
+      desc: json['description'] as String,
+      bargain: (json['bargain'] as num?)?.toDouble(),
+      type: json['type'] as String,
+      endDate: DateTime.parse(json['endDate'] as String),
+      shopId: json['shopId'] as int,
+      shop: Shop.fromJson(json['shop'] as Map<String, dynamic>),
+      amount: json['amount'] as int?,
     );
 
 Map<String, dynamic> _$CouponToJson(Coupon instance) => <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
-      'desc': instance.desc,
+      'description': instance.desc,
       'bargain': instance.bargain,
+      'type': instance.type,
+      'endDate': instance.endDate.toIso8601String(),
+      'shopId': instance.shopId,
+      'shop': instance.shop,
+      'amount': instance.amount,
     };

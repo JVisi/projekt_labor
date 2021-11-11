@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
+import 'package:shop_assistant/config/loader.dart';
 import 'package:shop_assistant/config/model.dart';
 import 'package:shop_assistant/core/shopping_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shop_assistant/web/get_all_coupons.dart';
+
+import 'coupon_screen.dart';
 
 class ItemScreen extends StatefulWidget {
   final List<ShopItem> originalItems;
@@ -104,19 +108,43 @@ class ItemScreenState extends State<ItemScreen> {
                     itemCount: itemTiles.length,
                     itemBuilder: (context, index) =>
                         itemTiles.elementAt(index))),
-            Expanded(
-              flex: 1,
-              child: ElevatedButton(
-                onPressed: () async {
-                  await scanBarcodeNormal();
-                },
-                child: Text(AppLocalizations.of(context).barcode_scanner),
-              ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await scanBarcodeNormal();
+                    },
+                    child: Text(AppLocalizations.of(context).barcode_scanner),
+                  ),
+                ),Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed: () {
+                       loadCoupons();
+                    },
+                    child: Text(AppLocalizations.of(context).barcode_scanner),
+                  ),
+                ),
+
+              ],
             )
           ],
         ),
       ),
     );
+  }
+
+  Future<void> loadCoupons() async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => LoadingHandler(
+                future: GetCoupons().sendRequest,
+                succeeding: (List<Coupon> sList) {
+                  return CouponScreen(originalCoupons: sList);
+                }))).then((value) => setState(() {}));
   }
 
   void _refresh() {
@@ -155,7 +183,8 @@ class ItemScreenState extends State<ItemScreen> {
           ///TODO
           ///go to shopItem edit here
         },
-        child: CheckboxListTile(isThreeLine: true,
+        child: CheckboxListTile(
+          isThreeLine: true,
           value: ids.contains(item.id),
           onChanged: (toAdd) {
             _setState(() {
@@ -173,10 +202,10 @@ class ItemScreenState extends State<ItemScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      item.name + ",  "),
+                    Text(item.name + ",  "),
                   ],
                 ),
               ),
@@ -196,7 +225,12 @@ class ItemScreenState extends State<ItemScreen> {
               )
             ],
           ),
-          subtitle: Text(item.shop.name + "  " + item.shop.address+"\n"+ item.price.toString() + "Ft"),
+          subtitle: Text(item.shop.name +
+              "  " +
+              item.shop.address +
+              "\n" +
+              item.price.toString() +
+              "Ft"),
         ),
       ),
     );

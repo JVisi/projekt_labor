@@ -54,5 +54,53 @@ class AppModel extends Model {
     }
   }
 
+  void addToCoupons(BuildContext context, Coupon coupon) {
+    coupon.amount == null ? coupon.amount = 1 : null;
+    final int index =
+        shoppingList.coupons!.indexWhere((element) => element.id == coupon.id);
+    if (index != -1) {
+      int currentAmount = shoppingList.coupons!.elementAt(index).amount!;
+      shoppingList.coupons!.removeWhere((element) => element.id == coupon.id);
+      int newAmount = currentAmount + coupon.amount!;
+
+      Coupon newCoupon = Coupon(
+          id: coupon.id,
+          name: coupon.name,
+          desc: coupon.desc,
+          endDate: coupon.endDate,
+          type: coupon.type,
+          bargain: coupon.bargain,
+          shopId: coupon.shopId,
+          shop: coupon.shop,
+          amount: newAmount);
+      shoppingList.coupons!.add(newCoupon);
+    } else {
+      shoppingList.coupons!.add(coupon);
+    }
+  }
+
+  void removeFromCoupons(BuildContext context, Coupon coupon) {
+    int index =
+        shoppingList.coupons!.indexWhere((element) => element.id == coupon.id);
+    if (shoppingList.coupons!.elementAt(index).amount! > coupon.amount!) {
+      int newAmount =
+          shoppingList.coupons!.elementAt(index).amount! - coupon.amount!;
+      shoppingList.coupons!.removeWhere((element) => element.id == coupon.id);
+      Coupon newCoupon = Coupon(
+          id: coupon.id,
+          name: coupon.name,
+          desc: coupon.desc,
+          endDate: coupon.endDate,
+          type: coupon.type,
+          bargain: coupon.bargain,
+          shopId: coupon.shopId,
+          shop: coupon.shop,
+          amount: newAmount);
+      shoppingList.coupons!.add(newCoupon);
+    } else {
+      shoppingList.coupons!.removeWhere((element) => element.id == coupon.id);
+    }
+  }
+
   static AppModel of(BuildContext context) => ScopedModel.of<AppModel>(context);
 }
