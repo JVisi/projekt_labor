@@ -6,5 +6,9 @@
     "empty_list": "Looks like your list is empty!",
     "final_amount": "Amount to pay: ",
     "add_item_tooltip": "Add products to your list",
-    "amount": "pcs: "
+    "amount": "pcs: ",
+    "alertDialogTitle": "Warning!",
+    "alertDialogText": "Product not found, do you wish to add it now?",
+    "barcode_scanner": "Scan barcode",
+    "cancel": "cancel"
 }

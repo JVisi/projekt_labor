@@ -25,13 +25,12 @@ Future<ShoppingList> loadShoppingList() async {
   return ShoppingList(shopItems: List.empty(growable: true), coupons: List.empty(growable: true));
 }
 
-/*
-Future<void> killLoginCreds() async{
+
+Future<void> killPreferences() async{
   SharedPreferences prefs=await SharedPreferences.getInstance();
-  prefs.remove("email");
-  prefs.remove("password");
+  prefs.remove("shoppingList");
 }
-*/
+
 
 class SizeConfig {
   static MediaQueryData? _mediaQueryData;

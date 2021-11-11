@@ -6,5 +6,9 @@
     "empty_list": "A bevásárlólistád üres!",
     "final_amount": "Fizetendő: ",
     "add_item_tooltip": "Vegyen fel termékeket",
-    "amount": "db: "
+    "amount": "db: ",
+    "alertDialogTitle": "Figyelem!",
+    "alertDialogText": "Nincs ilyen termék, hozzáadja most?",
+    "barcode_scanner": "Vonalkód olvasó",
+    "cancel": "Mégse"
 }
