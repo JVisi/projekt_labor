@@ -22,6 +22,11 @@ const Coupon = config.sequelize.define('coupon', {
     },
     bargain:{
         type:sequelize.DataTypes.INTEGER,
+        allowNull:true,
+        unique:false
+    },
+    type:{
+        type:sequelize.DataTypes.STRING,            //type: type1, type2, type3, végösszegből enged el konkrét összeget, %-ot enged el stb...
         allowNull:false,
         unique:false
     },
