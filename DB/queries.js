@@ -39,7 +39,7 @@ class QueryProvider {
 
         today = yyyy + '-' + mm + '-' + dd;
         return new Promise((resolve,reject)=>{
-            Coupon.findAll({limit:100,where:{"endDate":{[Op.gte]:today}}}).then((result)=>{
+            Coupon.findAll({limit:100,include:Shop, where:{"endDate":{[Op.gte]:today},}}).then((result)=>{
                 let coupon=result.map((c)=>{
                     return c.dataValues
                 })
