@@ -124,7 +124,12 @@ class QueryProvider {
             if(product!==null){
                 product.price=price===undefined ? product.price : price
                 product.name=name===undefined ? product.name : name
-                product.barcode=barcode===undefined ? product.barcode:barcode
+                if(barcode==null){
+                    product.barcode=null;
+                }
+                else{
+                    product.barcode=barcode===undefined ? product.barcode:barcode
+                }
                 product.save()
                 resolve({"product":product})
             }
