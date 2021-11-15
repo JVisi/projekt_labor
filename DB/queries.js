@@ -120,7 +120,7 @@ class QueryProvider {
     }
     static updateProduct(productId,price,name,barcode) {
         return new Promise(async (resolve,reject)=>{
-            const product = await Product.findOne({where:{"id":productId}})
+            const product = await Product.findOne({where:{"id":productId}, include:Shop})
             if(product!==null){
                 product.price=price===undefined ? product.price : price
                 product.name=name===undefined ? product.name : name
