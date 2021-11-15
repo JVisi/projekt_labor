@@ -24,5 +24,6 @@
     "add_items_appBar": "Add items",
     "yes": "Yes",
     "successful_update": "Updated successfully",
+    "fillTextFormWarning": "Please fill all the required forms",
     "default_error_message": "Oops, something went wrong..."
 }

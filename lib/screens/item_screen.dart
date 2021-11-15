@@ -8,6 +8,7 @@ import 'package:shop_assistant/config/loader.dart';
 import 'package:shop_assistant/config/model.dart';
 import 'package:shop_assistant/core/shopping_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shop_assistant/screens/add_new_item.dart';
 import 'package:shop_assistant/web/get_all_coupons.dart';
 
 import 'coupon_screen.dart';
@@ -98,7 +99,8 @@ class ItemScreenState extends State<ItemScreen> {
                     itemCount: shopFilterTiles.length,
                     itemBuilder: (context, index) =>
                         shopFilterTiles.elementAt(index)),
-              )
+              ),
+              ElevatedButton(onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>AddItemScreen(distinctShops: distinctShops())),), child: Text(AppLocalizations.of(context).new_product_button))
             ],
           ),
         ),

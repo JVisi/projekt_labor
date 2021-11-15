@@ -24,5 +24,6 @@
     "add_items_appBar": "Termékek felvétele",
     "yes": "Igen",
     "successful_update": "Sikeresen frissítve",
+    "fillTextFormWarning": "Kérjük mindent mezőt töltsön ki",
     "default_error_message": "Hoppá, valami hiba történt..."
 }

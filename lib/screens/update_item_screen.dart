@@ -50,7 +50,7 @@ class UpdateItemScreenState extends State<UpdateItemScreen> {
                           labelText: AppLocalizations
                               .of(context)
                               .item_name),
-                      controller: _name..text = widget.item!.name,
+                      controller: _name..text = widget.item.name,
                     ),
                   ),
                   Padding(
@@ -62,7 +62,7 @@ class UpdateItemScreenState extends State<UpdateItemScreen> {
                           labelText: AppLocalizations
                               .of(context)
                               .item_price),
-                      controller: _price..text = widget.item!.price.toString(),
+                      controller: _price..text = widget.item.price.toString(),
                       keyboardType: TextInputType.number,
                     ),
                   ),
@@ -75,7 +75,7 @@ class UpdateItemScreenState extends State<UpdateItemScreen> {
                           labelText: AppLocalizations
                               .of(context)
                               .item_barcode),
-                      controller: _barcode..text = widget.item!.barcode ?? "",
+                      controller: _barcode..text = widget.item.barcode ?? "",
                       keyboardType: TextInputType.number,
                     ),
                   ),
