@@ -1,5 +1,5 @@
 const sequelize = require("sequelize");
-const { Op } = require("sequelize")
+const { Op, where } = require("sequelize")
 const Coupon = require("./Models/Coupon")
 const Product = require("./Models/Product")
 const Shop = require("./Models/Shop")
@@ -141,9 +141,11 @@ class QueryProvider {
                 "price":_price,
                 "barcode":_barcode===undefined ? null : _barcode,
                 "shopId":shopId
-            },{include:[{association:Shop}]}).then((result)=>{
+            }).then((result)=>{
                 console.log(result)
-                resolve(result)
+                Product.findOne({where:{"id":result.dataValues.id}, include:Shop}).then(shop=>{
+                    resolve(shop)
+                })
             }).catch(err=>{
                 console.log(err)
                 reject({"error":"error"})
