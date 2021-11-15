@@ -140,7 +140,7 @@ class QueryProvider {
                 "price":_price,
                 "barcode":_barcode===undefined ? null : _barcode,
                 "shopId":shopId
-            },{include:Shop}).then((result)=>{
+            },{include:[{association:Shop}]}).then((result)=>{
                 console.log(result)
                 resolve(result)
             }).catch(err=>{
