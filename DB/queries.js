@@ -134,6 +134,7 @@ class QueryProvider {
         })
     }
     static addProduct(_name,_price,_barcode, shopId){
+        console.log(_name+" "+_price)
         return new Promise((resolve,reject)=>{  
             Product.create({
                 "name":_name,
