@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
+import 'package:shop_assistant/config/core.dart';
 import 'package:shop_assistant/config/loader.dart';
 import 'package:shop_assistant/config/model.dart';
 import 'package:shop_assistant/core/shopping_list.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shop_assistant/web/get_all_coupons.dart';
 
 import 'coupon_screen.dart';
+import 'update_item_screen.dart';
 
 class ItemScreen extends StatefulWidget {
   final List<ShopItem> originalItems;
@@ -66,10 +68,11 @@ class ItemScreenState extends State<ItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     // TODO: implement build
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text("Add items")),
+        appBar: AppBar(title: Text(AppLocalizations.of(context).add_product_appBar)),
         drawer: Drawer(
           child: Column(
             children: [
@@ -79,12 +82,12 @@ class ItemScreenState extends State<ItemScreen> {
                   shrinkWrap: true,
                   primary: false,
                   physics: const NeverScrollableScrollPhysics(),
-                  children: const [
+                  children: [
                     DrawerHeader(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.blue,
                       ),
-                      child: Text('Filters'),
+                      child: Text(AppLocalizations.of(context).filter),
                     ),
                   ],
                 ),
@@ -108,27 +111,41 @@ class ItemScreenState extends State<ItemScreen> {
                     itemCount: itemTiles.length,
                     itemBuilder: (context, index) =>
                         itemTiles.elementAt(index))),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await scanBarcodeNormal();
-                    },
-                    child: Text(AppLocalizations.of(context).barcode_scanner),
+            Expanded(flex: 1,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.blockSizeHorizontal),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                                vertical: SizeConfig.blockSizeVertical*3)),
+                        onPressed: () async {
+                          await scanBarcodeNormal();
+                        },
+                        child: Text(AppLocalizations.of(context).barcode_scanner),
+                      ),
+                    ),
                   ),
-                ),Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                       loadCoupons();
-                    },
-                    child: Text(AppLocalizations.of(context).barcode_scanner),
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: SizeConfig.blockSizeHorizontal, vertical: SizeConfig.blockSizeVertical),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                                vertical: SizeConfig.blockSizeVertical*3)),
+                        onPressed: () {
+                          loadCoupons();
+                        },
+                        child: Text(AppLocalizations.of(context).coupons_button),
+                      ),
+                    ),
                   ),
-                ),
-
-              ],
+                ],
+              ),
             )
           ],
         ),
@@ -179,6 +196,32 @@ class ItemScreenState extends State<ItemScreen> {
       builder: (context, _setState) => GestureDetector(
         onLongPress: () {
           print("asdf");
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: Text(AppLocalizations.of(context).alertDialogTitle),
+              content: Text(AppLocalizations.of(context).update_product),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    ///TODO add new item
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UpdateItemScreen(
+                                  item: item,
+                                )));
+                  },
+                  child: Text(AppLocalizations.of(context).yes),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                  child: Text(AppLocalizations.of(context).cancel),
+                ),
+              ],
+            ),
+          );
 
           ///TODO
           ///go to shopItem edit here

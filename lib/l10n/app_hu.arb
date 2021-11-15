@@ -10,5 +10,19 @@
     "alertDialogTitle": "Figyelem!",
     "alertDialogText": "Nincs ilyen termék, hozzáadja most?",
     "barcode_scanner": "Vonalkód olvasó",
-    "cancel": "Mégse"
+    "cancel": "Mégse",
+    "filter": "Szűrők",
+    "item_name": "Termék neve",
+    "item_price": "Termék ára",
+    "item_barcode": "Termék vonalkódja - nem kötelező",
+    "update_product": "Szeretné szerkeszteni a terméket?",
+    "update_product_appBar": "Termék szerkesztése",
+    "add_product_appBar": "Új termék hozzáadása",
+    "save_changes": "Adatok mentése",
+    "new_product_button": "Új termék",
+    "coupons_button": "Kuponok",
+    "add_items_appBar": "Termékek felvétele",
+    "yes": "Igen",
+    "successful_update": "Sikeresen frissítve",
+    "default_error_message": "Hoppá, valami hiba történt..."
 }

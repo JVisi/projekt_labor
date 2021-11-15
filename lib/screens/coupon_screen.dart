@@ -64,7 +64,7 @@ class CouponScreenState extends State<CouponScreen> {
     // TODO: implement build
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text("Add items")),
+        appBar: AppBar(title: Text(AppLocalizations.of(context).coupons_button)),
         drawer: Drawer(
           child: Column(
             children: [
@@ -74,12 +74,12 @@ class CouponScreenState extends State<CouponScreen> {
                   shrinkWrap: true,
                   primary: false,
                   physics: const NeverScrollableScrollPhysics(),
-                  children: const [
+                  children: [
                     DrawerHeader(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.blue,
                       ),
-                      child: Text('Filters'),
+                      child: Text(AppLocalizations.of(context).filter),
                     ),
                   ],
                 ),
