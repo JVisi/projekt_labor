@@ -118,11 +118,12 @@ class QueryProvider {
             })
         })
     }
-    static updateProduct(productId,price,barcode) {
+    static updateProduct(productId,price,name,barcode) {
         return new Promise(async (resolve,reject)=>{
             const product = await Product.findOne({where:{"id":productId}})
             if(product!==null){
-                product.priceknjnj=price===undefined ? product.price : price
+                product.price=price===undefined ? product.price : price
+                product.name=name===undefined ? product.name : name
                 product.barcode=barcode===undefined ? product.barcode:barcode
                 product.save()
                 resolve({"product":product})
