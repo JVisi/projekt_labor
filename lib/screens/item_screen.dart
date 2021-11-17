@@ -10,6 +10,7 @@ import 'package:shop_assistant/core/shopping_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shop_assistant/screens/add_new_item.dart';
 import 'package:shop_assistant/web/get_all_coupons.dart';
+import 'package:shop_assistant/web/get_shops.dart';
 
 import 'coupon_screen.dart';
 import 'update_item_screen.dart';
@@ -73,7 +74,8 @@ class ItemScreenState extends State<ItemScreen> {
     // TODO: implement build
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text(AppLocalizations.of(context).add_product_appBar)),
+        appBar: AppBar(
+            title: Text(AppLocalizations.of(context).add_product_appBar)),
         drawer: Drawer(
           child: Column(
             children: [
@@ -100,7 +102,20 @@ class ItemScreenState extends State<ItemScreen> {
                     itemBuilder: (context, index) =>
                         shopFilterTiles.elementAt(index)),
               ),
-              ElevatedButton(onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>AddItemScreen(distinctShops: distinctShops())),), child: Text(AppLocalizations.of(context).new_product_button))
+              ElevatedButton(
+                  onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoadingHandler(
+                              future: GetShops().sendRequest,
+                              succeeding: (List<Shop> shops) {
+                                return AddItemScreen(
+                                  distinctShops: shops,
+                                );
+                              }),
+                        ),
+                      ),
+                  child: Text(AppLocalizations.of(context).new_product_button))
             ],
           ),
         ),
@@ -113,36 +128,42 @@ class ItemScreenState extends State<ItemScreen> {
                     itemCount: itemTiles.length,
                     itemBuilder: (context, index) =>
                         itemTiles.elementAt(index))),
-            Expanded(flex: 1,
+            Expanded(
+              flex: 1,
               child: Row(
                 children: [
                   Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: SizeConfig.blockSizeHorizontal),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.blockSizeHorizontal),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
-                                vertical: SizeConfig.blockSizeVertical*3)),
+                                vertical: SizeConfig.blockSizeVertical * 3)),
                         onPressed: () async {
                           await scanBarcodeNormal();
                         },
-                        child: Text(AppLocalizations.of(context).barcode_scanner),
+                        child:
+                            Text(AppLocalizations.of(context).barcode_scanner),
                       ),
                     ),
                   ),
                   Expanded(
                     flex: 1,
                     child: Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: SizeConfig.blockSizeHorizontal, vertical: SizeConfig.blockSizeVertical),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.blockSizeHorizontal,
+                          vertical: SizeConfig.blockSizeVertical),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
-                                vertical: SizeConfig.blockSizeVertical*3)),
+                                vertical: SizeConfig.blockSizeVertical * 3)),
                         onPressed: () {
                           loadCoupons();
                         },
-                        child: Text(AppLocalizations.of(context).coupons_button),
+                        child:
+                            Text(AppLocalizations.of(context).coupons_button),
                       ),
                     ),
                   ),
