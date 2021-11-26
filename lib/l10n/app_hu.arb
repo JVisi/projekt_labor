@@ -25,5 +25,9 @@
     "yes": "Igen",
     "successful_update": "Sikeresen frissítve",
     "fillTextFormWarning": "Kérjük mindent mezőt töltsön ki",
-    "default_error_message": "Hoppá, valami hiba történt..."
+    "default_error_message": "Hoppá, valami hiba történt...",
+    "successful_add": "Sikeres hozzáadás",
+    "shop_name": "Bolt neve",
+    "shop_address": "Bolt címe",
+    "new_shop_button": "Új bolt"
 }

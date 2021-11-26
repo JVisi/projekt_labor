@@ -9,6 +9,7 @@ import 'package:shop_assistant/config/model.dart';
 import 'package:shop_assistant/core/shopping_list.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shop_assistant/screens/add_new_item.dart';
+import 'package:shop_assistant/screens/add_new_shop.dart';
 import 'package:shop_assistant/web/get_all_coupons.dart';
 import 'package:shop_assistant/web/get_shops.dart';
 
@@ -102,20 +103,43 @@ class ItemScreenState extends State<ItemScreen> {
                     itemBuilder: (context, index) =>
                         shopFilterTiles.elementAt(index)),
               ),
-              ElevatedButton(
-                  onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoadingHandler(
-                              future: GetShops().sendRequest,
-                              succeeding: (List<Shop> shops) {
-                                return AddItemScreen(
-                                  distinctShops: shops,
-                                );
-                              }),
-                        ),
-                      ),
-                  child: Text(AppLocalizations.of(context).new_product_button))
+              Row(mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Expanded(
+                      child: ElevatedButton(
+                          onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoadingHandler(
+                                      future: GetShops().sendRequest,
+                                      succeeding: (List<Shop> shops) {
+                                        return AddItemScreen(
+                                          distinctShops: shops,
+                                        );
+                                      }),
+                                ),
+                              ),
+                          child: Text(
+                              AppLocalizations.of(context).new_product_button)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Expanded(
+                      child: ElevatedButton(
+                          onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddShopScreen()),
+                              ),
+                          child:
+                              Text(AppLocalizations.of(context).new_shop_button)),
+                    ),
+                  )
+                ],
+              ),
             ],
           ),
         ),
